@@ -1,966 +1,782 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeFlow | Visual Development Platform</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>张雪机车 | 车迷殿堂 · 性能信仰</title>
+    <!-- Google Fonts & Font Awesome 6 (免费图标库) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f9fbfd;
+            font-family: 'Inter', sans-serif;
+            background: #050505;
+            color: #ededed;
+            scroll-behavior: smooth;
+            line-height: 1.5;
         }
-        
-        h1, h2, h3, h4 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            line-height: 1.3;
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e03a3a;
+            border-radius: 10px;
+        }
+
+        /* 重复使用的容器 */
         .container {
-            width: 100%;
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
-        
-        /* Header & Navigation */
-        header {
-            background-color: #fff;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            position: fixed;
-            width: 100%;
+
+        /* 导航栏 */
+        .navbar {
+            position: sticky;
+            top: 0;
             z-index: 1000;
+            background: rgba(5, 5, 5, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(224, 58, 58, 0.25);
+            padding: 16px 0;
+            transition: all 0.3s ease;
         }
-        
-        nav {
+        .nav-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
         }
-        
         .logo {
             display: flex;
-            align-items: center;
+            align-items: baseline;
+            gap: 6px;
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
         }
-        
-        .logo-icon {
-            color: #4361ee;
-            font-size: 28px;
-            margin-right: 10px;
+        .logo span:first-child {
+            color: #e03a3a;
         }
-        
-        .logo-text {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
+        .logo span:last-child {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #aaa;
+            letter-spacing: 1px;
         }
-        
-        .logo-text span {
-            color: #4361ee;
-        }
-        
         .nav-links {
             display: flex;
+            gap: 28px;
             list-style: none;
+            flex-wrap: wrap;
         }
-        
-        .nav-links li {
-            margin-left: 30px;
-        }
-        
         .nav-links a {
             text-decoration: none;
-            color: #555;
+            color: #e0e0e0;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: 0.25s ease;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
         }
-        
-        .nav-links a:hover {
-            color: #4361ee;
+        .nav-links a:hover, .nav-links a.active {
+            color: #e03a3a;
         }
-        
-        .cta-button {
-            background-color: #4361ee;
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+        /* 移动端适应 */
+        @media (max-width: 780px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 18px;
+            }
+            .logo {
+                font-size: 1.5rem;
+            }
         }
-        
-        .cta-button:hover {
-            background-color: #3a56d4;
-            transform: translateY(-2px);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: #333;
-            cursor: pointer;
-        }
-        
-        /* Hero Section */
+
+        /* Hero 区 — 硬核机车氛围 */
         .hero {
-            padding: 150px 0 100px;
-            background: linear-gradient(135deg, #f0f4ff 0%, #f9fbfd 100%);
+            padding: 100px 0 120px;
+            background: radial-gradient(circle at 20% 30%, #0f0f0f, #010101);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(224,58,58,0.3);
         }
-        
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" opacity="0.08"><path fill="none" stroke="%23e03a3a" stroke-width="1.5" d="M200 300 L600 300 M150 400 L650 400 M100 500 L700 500 M250 200 L550 200 M300 150 L500 150"/><circle cx="400" cy="400" r="180" stroke="%23e03a3a" fill="none" stroke-width="1.2"/><path d="M400 220 L400 580 M220 400 L580 400" stroke="%23e03a3a" stroke-width="0.8"/></svg>');
+            background-repeat: repeat;
+            opacity: 0.25;
+            pointer-events: none;
+        }
         .hero-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .hero-text {
-            flex: 1;
-            padding-right: 40px;
-        }
-        
-        .hero-text h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: #222;
-        }
-        
-        .hero-text h1 span {
-            color: #4361ee;
-        }
-        
-        .hero-text p {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 30px;
-            max-width: 600px;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .secondary-button {
-            background-color: white;
-            color: #4361ee;
-            border: 2px solid #4361ee;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .secondary-button:hover {
-            background-color: #f0f4ff;
-        }
-        
-        .hero-image {
-            flex: 1;
+            position: relative;
+            z-index: 2;
             text-align: center;
-        }
-        
-        .hero-image img {
-            max-width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 20px 40px rgba(67, 97, 238, 0.15);
-        }
-        
-        /* Features Section */
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        .section-title h2 {
-            font-size: 36px;
-            color: #222;
-            margin-bottom: 15px;
-        }
-        
-        .section-title p {
-            color: #666;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .features {
-            padding: 100px 0;
-            background-color: white;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-        
-        .feature-card {
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .feature-icon {
-            background-color: #eef2ff;
-            color: #4361ee;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 28px;
-        }
-        
-        .feature-card h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-        
-        .feature-card p {
-            color: #666;
-        }
-        
-        /* Benefits Section */
-        .benefits {
-            padding: 100px 0;
-            background-color: #f0f4ff;
-        }
-        
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-        }
-        
-        .benefit-item {
-            text-align: center;
-            padding: 30px 20px;
-        }
-        
-        .benefit-icon {
-            color: #4361ee;
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
-        
-        .benefit-item h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-        
-        .benefit-item p {
-            color: #666;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 100px 0;
-            background-color: white;
-        }
-        
-        .testimonial-slider {
             max-width: 800px;
             margin: 0 auto;
-            position: relative;
         }
-        
-        .testimonial {
-            background: #f9fbfd;
-            padding: 40px;
-            border-radius: 10px;
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #e03a3a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: #bcbcbc;
+            margin-bottom: 36px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 32px;
+            border-radius: 40px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.25s;
+            border: 1px solid transparent;
+        }
+        .btn-primary {
+            background: #e03a3a;
+            color: white;
+            box-shadow: 0 4px 14px rgba(224,58,58,0.3);
+        }
+        .btn-primary:hover {
+            background: #c02c2c;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(224,58,58,0.4);
+        }
+        .btn-outline {
+            border: 1px solid #e03a3a;
+            color: #e03a3a;
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background: rgba(224,58,58,0.1);
+            transform: translateY(-3px);
+        }
+
+        /* 通用区块 */
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            letter-spacing: -0.5px;
         }
-        
-        .testimonial-text {
-            font-size: 18px;
-            font-style: italic;
-            margin-bottom: 30px;
-            color: #555;
+        .section-sub {
+            text-align: center;
+            color: #b0b0b0;
+            max-width: 680px;
+            margin: 0 auto 56px auto;
+            font-size: 1.1rem;
         }
-        
-        .testimonial-author {
+        .accent {
+            color: #e03a3a;
+        }
+
+        /* 关于区域 双列 */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        .about-text p {
+            color: #c0c0c0;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 24px;
+        }
+        .stat-item {
+            background: #111;
+            padding: 16px 20px;
+            border-radius: 20px;
+            text-align: center;
+            border-left: 3px solid #e03a3a;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #e03a3a;
+        }
+        .about-icon {
+            background: linear-gradient(145deg, #141414, #080808);
+            border-radius: 32px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid #2a2a2a;
+        }
+        .about-icon i {
+            font-size: 7rem;
+            color: #e03a3a;
+            margin-bottom: 20px;
+        }
+
+        /* 车型卡片网格 */
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 20px;
+        }
+        .model-card {
+            background: #0c0c0c;
+            border-radius: 28px;
+            overflow: hidden;
+            transition: 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid #202020;
+            backdrop-filter: blur(2px);
+        }
+        .model-card:hover {
+            transform: translateY(-10px);
+            border-color: #e03a3a;
+            box-shadow: 0 20px 30px -12px rgba(224,58,58,0.2);
+        }
+        .model-img {
+            background: #1a1a1a;
+            height: 220px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 5rem;
+            color: #e03a3a;
+            transition: 0.2s;
         }
-        
-        .author-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #ddd;
-            margin-right: 15px;
+        .model-card:hover .model-img {
+            background: #232323;
+        }
+        .model-info {
+            padding: 24px;
+        }
+        .model-name {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .model-specs {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #4361ee;
-            font-size: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 16px 0;
+            font-size: 0.85rem;
+            color: #bbb;
         }
-        
-        .author-info h4 {
-            font-size: 18px;
-            margin-bottom: 5px;
+        .model-specs span i {
+            margin-right: 6px;
+            color: #e03a3a;
         }
-        
-        .author-info p {
-            color: #777;
-            font-size: 14px;
+        .model-price {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #e03a3a;
+            margin: 16px 0 12px;
         }
-        
-        /* Pricing Section */
-        .pricing {
-            padding: 100px 0;
-            background-color: #f9fbfd;
+        .btn-small {
+            background: transparent;
+            border: 1px solid #e03a3a;
+            border-radius: 40px;
+            padding: 8px 20px;
+            font-weight: 600;
+            color: #e03a3a;
+            transition: 0.2s;
+            display: inline-block;
+            text-decoration: none;
         }
-        
-        .pricing-grid {
+        .btn-small:hover {
+            background: #e03a3a;
+            color: white;
+        }
+
+        /* 粉丝留言区/评价 */
+        .fans-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
         }
-        
-        .pricing-card {
-            background: white;
-            border-radius: 10px;
-            padding: 40px 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            transition: transform 0.3s;
+        .testimonial {
+            background: #0e0e0e;
+            border-radius: 28px;
+            padding: 28px;
+            border: 1px solid #262626;
+            transition: 0.2s;
         }
-        
-        .pricing-card.featured {
-            border-top: 5px solid #4361ee;
-            transform: scale(1.05);
-            position: relative;
+        .testimonial:hover {
+            border-color: #e03a3a;
         }
-        
-        .featured-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #4361ee;
-            color: white;
-            padding: 5px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
+        .testimonial i.fa-quote-left {
+            font-size: 1.8rem;
+            color: #e03a3a;
+            opacity: 0.7;
+            margin-bottom: 16px;
+            display: inline-block;
         }
-        
-        .pricing-card:hover {
-            transform: translateY(-10px);
+        .testimonial p {
+            font-style: italic;
+            margin: 16px 0;
+            color: #d4d4d4;
         }
-        
-        .pricing-card.featured:hover {
-            transform: scale(1.05) translateY(-10px);
-        }
-        
-        .plan-name {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #333;
-        }
-        
-        .plan-price {
-            font-size: 48px;
+        .fan-name {
             font-weight: 700;
-            color: #4361ee;
-            margin-bottom: 20px;
+            margin-top: 16px;
+            color: #e03a3a;
         }
-        
-        .plan-price span {
-            font-size: 16px;
-            color: #777;
-        }
-        
-        .plan-features {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-        
-        .plan-features li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-            color: #555;
-        }
-        
-        .plan-features li:last-child {
-            border-bottom: none;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            padding: 100px 0;
-            background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
-            text-align: center;
-            color: white;
-        }
-        
-        .cta-section h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-        
-        .cta-section p {
-            font-size: 18px;
-            max-width: 700px;
-            margin: 0 auto 30px;
-            opacity: 0.9;
-        }
-        
-        .cta-section .cta-button {
-            background-color: white;
-            color: #4361ee;
-            font-size: 16px;
-            padding: 15px 40px;
-        }
-        
-        .cta-section .cta-button:hover {
-            background-color: #f0f4ff;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: #222;
-            color: #ccc;
-            padding: 70px 0 20px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-        
-        .footer-column h3 {
-            font-size: 20px;
-            color: white;
-            margin-bottom: 25px;
-        }
-        
-        .footer-links {
-            list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-        
-        .footer-links a {
-            color: #aaa;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-links a:hover {
-            color: #4361ee;
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #444;
-            font-size: 14px;
+        .fan-location {
+            font-size: 0.8rem;
             color: #888;
         }
-        
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .hero-content {
+
+        /* 赛事荣誉 精简 */
+        .honor-badge {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 28px;
+            margin: 48px 0 0;
+        }
+        .honor-item {
+            background: #0c0c0c;
+            border-radius: 50px;
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #2c2c2c;
+        }
+        .honor-item i {
+            font-size: 2rem;
+            color: #e03a3a;
+        }
+
+        /* 订阅区 */
+        .newsletter {
+            background: linear-gradient(135deg, #0f0f0f 0%, #000000 100%);
+            border-radius: 48px;
+            padding: 60px 40px;
+            text-align: center;
+            border: 1px solid rgba(224,58,58,0.3);
+            margin-top: 40px;
+        }
+        .newsletter h3 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .newsletter p {
+            margin-bottom: 32px;
+            color: #aaa;
+        }
+        .form-group {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+        .form-group input {
+            flex: 1;
+            padding: 14px 22px;
+            border-radius: 60px;
+            border: none;
+            background: #1a1a1a;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            border: 1px solid #333;
+        }
+        .form-group input:focus {
+            border-color: #e03a3a;
+        }
+        .form-group button {
+            background: #e03a3a;
+            border: none;
+            padding: 0 32px;
+            border-radius: 60px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .form-group button:hover {
+            background: #b92b2b;
+        }
+
+        /* 页脚 */
+        footer {
+            padding: 48px 0 32px;
+            background: #020202;
+            border-top: 1px solid #1f1f1f;
+        }
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+        .social-links a {
+            color: #ccc;
+            font-size: 1.4rem;
+            margin-left: 20px;
+            transition: 0.2s;
+        }
+        .social-links a:hover {
+            color: #e03a3a;
+        }
+        .copyright {
+            font-size: 0.8rem;
+            color: #6f6f6f;
+        }
+
+        @media (max-width: 760px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .newsletter {
+                padding: 40px 24px;
+            }
+            .stats {
                 flex-direction: column;
             }
-            
-            .hero-text {
-                padding-right: 0;
-                margin-bottom: 50px;
-                text-align: center;
-            }
-            
-            .hero-text p {
-                margin: 0 auto 30px;
-            }
-            
-            .pricing-card.featured {
-                transform: none;
-            }
-            
-            .pricing-card.featured:hover {
-                transform: translateY(-10px);
-            }
         }
-        
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .hero-text h1 {
-                font-size: 36px;
-            }
-            
-            .section-title h2 {
-                font-size: 30px;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .hero-buttons button {
-                width: 100%;
-                max-width: 300px;
-            }
+        .hidden-on-mobile {
+            display: inline;
         }
-        
-        @media (max-width: 576px) {
-            .hero {
-                padding: 130px 0 80px;
-            }
-            
-            .features, .benefits, .testimonials, .pricing, .cta-section {
-                padding: 70px 0;
-            }
-            
-            .feature-card, .testimonial {
-                padding: 25px;
-            }
-            
-            .plan-price {
-                font-size: 36px;
-            }
+        .smooth-icon {
+            transition: 0.2s;
+        }
+        a {
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <!-- Header & Navigation -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <div class="logo-icon"><i class="fas fa-bezier-curve"></i></div>
-                    <div class="logo-text">Code<span>Flow</span></div>
-                </div>
-                
-                <ul class="nav-links">
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#benefits">Benefits</a></li>
-                    <li><a href="#testimonials">Testimonials</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#">Resources</a></li>
-                </ul>
-                
-                <button class="cta-button">Start Free Trial</button>
-                <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
-            </nav>
-        </div>
-    </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
+<!-- 导航栏 -->
+<nav class="navbar">
+    <div class="container nav-container">
+        <div class="logo">
+            <span>张雪机车</span>
+            <span>｜ZHANGXUE MOTO</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">首页</a></li>
+            <li><a href="#about">传奇</a></li>
+            <li><a href="#models">车型</a></li>
+            <li><a href="#fans">车迷说</a></li>
+            <li><a href="#contact">俱乐部</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main>
+    <!-- Hero 区 -->
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <h1>张雪机车 · 为性能而生</h1>
+            <p>以赛道淬炼灵魂，以狂热致敬自由。中国机车领潮者 —— 张雪机车，点燃每一段征途。</p>
+            <div class="btn-group">
+                <a href="#models" class="btn btn-primary"><i class="fas fa-motorcycle"></i> 探索车型</a>
+                <a href="#fans" class="btn btn-outline"><i class="fas fa-users"></i> 车迷社区</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于张雪机车 传奇人物+品牌故事 -->
+    <section id="about">
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1>Build Apps Faster With <span>Visual Development</span></h1>
-                    <p>CodeFlow empowers teams to create enterprise-grade applications with minimal coding. Drag, drop, and connect components to build powerful web and mobile apps in record time.</p>
-                    <div class="hero-buttons">
-                        <button class="cta-button">Start Building Free</button>
-                        <button class="secondary-button">Watch Demo</button>
+            <h2 class="section-title">张雪 · 执迷造梦的骑士<span class="accent">.</span></h2>
+            <div class="section-sub">冠军车手出身，中国中大排量机车开拓者。以极致工程执念，打造属于世界的中国性能摩托。</div>
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3>始于热爱，忠于赛道</h3>
+                    <p>张雪，中国摩托车运动的旗帜性人物，从越野赛场到公路竞速，始终怀揣“让世界看见中国造车力量”的梦想。2019年创立张雪机车研发团队，历经数千次测试，推出多款征服国际市场的性能猛兽。每一颗螺丝、每一度倾角，都注入竞速灵魂。</p>
+                    <p>如今，张雪机车不仅是速度的符号，更是千万车迷的信仰图腾。坚持“无赛道不调校”，每一台量产车都经过最严苛的赛道验证。</p>
+                    <div class="stats">
+                        <div class="stat-item"><div class="stat-number">50+</div><div>国际赛事奖杯</div></div>
+                        <div class="stat-item"><div class="stat-number">8款</div><div>殿堂级机车</div></div>
+                        <div class="stat-item"><div class="stat-number">200k+</div><div>全球车迷</div></div>
                     </div>
                 </div>
-                <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="CodeFlow Platform Interface">
+                <div class="about-icon">
+                    <i class="fas fa-helmet-safety"></i>
+                    <i class="fas fa-tachometer-alt" style="font-size: 3rem; margin: 0 12px;"></i>
+                    <i class="fas fa-fire"></i>
+                    <p style="margin-top: 20px; font-weight: 500;">「生为竞速，死磕操控」</p>
+                    <small>—— 张雪 · 首席试车手</small>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
+    <!-- 车型展示 三款旗舰 -->
+    <section id="models">
         <div class="container">
-            <div class="section-title">
-                <h2>Powerful Features for Rapid Development</h2>
-                <p>CodeFlow provides all the tools you need to build, deploy, and scale applications without writing extensive code.</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-th-large"></i>
+            <h2 class="section-title">猛兽座驾 · <span class="accent">旗舰三杰</span></h2>
+            <div class="section-sub">每一款张雪机车都蕴含着暴力美学与精准操控，从街道劈弯到荒野远征，释放你的驾驶本能。</div>
+            <div class="models-grid">
+                <!-- 车型1 -->
+                <div class="model-card">
+                    <div class="model-img">
+                        <i class="fas fa-motorcycle"></i>
                     </div>
-                    <h3>Visual Builder</h3>
-                    <p>Drag and drop UI components to design responsive interfaces. Connect data sources with simple point-and-click actions.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-database"></i>
+                    <div class="model-info">
+                        <div class="model-name">ZX 500R</div>
+                        <div class="model-specs">
+                            <span><i class="fas fa-tachometer-alt"></i> 486cc 双缸</span>
+                            <span><i class="fas fa-horse-head"></i> 58.6匹</span>
+                            <span><i class="fas fa-weight-hanging"></i> 168kg</span>
+                        </div>
+                        <p>中量级仿赛霸主，零百加速3.8秒，弯道循迹性极佳，标配滑动离合&双通道ABS。</p>
+                        <div class="model-price">¥ 36,800 起</div>
+                        <a href="#" class="btn-small">预约试驾 <i class="fas fa-arrow-right"></i></a>
                     </div>
-                    <h3>Database Integration</h3>
-                    <p>Connect to any data source with built-in connectors. Automatically generate CRUD operations without writing SQL.</p>
                 </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
+                <!-- 车型2 -->
+                <div class="model-card">
+                    <div class="model-img">
+                        <i class="fas fa-truck-pickup"></i>
                     </div>
-                    <h3>Cross-Platform</h3>
-                    <p>Build once, deploy everywhere. Generate applications for web, iOS, and Android from a single visual design.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-code"></i>
+                    <div class="model-info">
+                        <div class="model-name">ZX 800ADV</div>
+                        <div class="model-specs">
+                            <span><i class="fas fa-tachometer-alt"></i> 799cc 并列双缸</span>
+                            <span><i class="fas fa-horse-head"></i> 95匹</span>
+                            <span><i class="fas fa-weight-hanging"></i> 210kg</span>
+                        </div>
+                        <p>硬派拉力旗舰，长行程悬挂+真空辐条轮，探险无界，征战摩旅天堂。</p>
+                        <div class="model-price">¥ 58,800 起</div>
+                        <a href="#" class="btn-small">预约试驾 <i class="fas fa-arrow-right"></i></a>
                     </div>
-                    <h3>Extensible with Code</h3>
-                    <p>Add custom functionality with JavaScript when needed. Our platform doesn't limit your creativity or complexity.</p>
                 </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Enterprise Security</h3>
-                    <p>Built-in authentication, authorization, and data encryption. SOC2 compliant with enterprise-grade security features.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <h3>One-Click Deployment</h3>
-                    <p>Deploy to cloud or on-premises with a single click. Automatic scaling and monitoring included.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section class="benefits" id="benefits">
-        <div class="container">
-            <div class="section-title">
-                <h2>Why Choose CodeFlow?</h2>
-                <p>Join thousands of companies accelerating their digital transformation with low-code development.</p>
-            </div>
-            
-            <div class="benefits-grid">
-                <div class="benefit-item">
-                    <div class="benefit-icon">
+                <!-- 车型3 -->
+                <div class="model-card">
+                    <div class="model-img">
                         <i class="fas fa-bolt"></i>
                     </div>
-                    <h3>10x Faster Development</h3>
-                    <p>Build applications in days instead of months with visual development tools.</p>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </div>
-                    <h3>Reduce Costs by 70%</h3>
-                    <p>Lower development and maintenance costs with fewer resources required.</p>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>Citizen Developers</h3>
-                    <p>Enable business users to build solutions with minimal IT assistance.</p>
-                </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Scale Effortlessly</h3>
-                    <p>From prototype to enterprise-scale applications with the same platform.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials" id="testimonials">
-        <div class="container">
-            <div class="section-title">
-                <h2>Trusted by Industry Leaders</h2>
-                <p>See what our customers have to say about their experience with CodeFlow.</p>
-            </div>
-            
-            <div class="testimonial-slider">
-                <div class="testimonial">
-                    <div class="testimonial-text">
-                        "CodeFlow transformed how we deliver solutions to our business units. What used to take 6 months now takes 3 weeks. Our development team can focus on complex problems while business teams build their own solutions."
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">SC</div>
-                        <div class="author-info">
-                            <h4>Sarah Chen</h4>
-                            <p>CTO, TechGrowth Inc.</p>
+                    <div class="model-info">
+                        <div class="model-name">ZX 250RR</div>
+                        <div class="model-specs">
+                            <span><i class="fas fa-tachometer-alt"></i> 249cc 高转单缸</span>
+                            <span><i class="fas fa-horse-head"></i> 32匹</span>
+                            <span><i class="fas fa-weight-hanging"></i> 147kg</span>
                         </div>
+                        <p>入门级弯道利器，运动调校，高转爆发激情，新手进阶最佳伙伴。</p>
+                        <div class="model-price">¥ 22,800 起</div>
+                        <a href="#" class="btn-small">预约试驾 <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="pricing" id="pricing">
-        <div class="container">
-            <div class="section-title">
-                <h2>Simple, Transparent Pricing</h2>
-                <p>Choose the plan that fits your needs. All plans include core features with no hidden fees.</p>
-            </div>
-            
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3 class="plan-name">Starter</h3>
-                    <div class="plan-price">$29<span>/month</span></div>
-                    <ul class="plan-features">
-                        <li>Up to 5 users</li>
-                        <li>10 GB storage</li>
-                        <li>Basic components</li>
-                        <li>Community support</li>
-                        <li>1 production app</li>
-                    </ul>
-                    <button class="secondary-button">Get Started</button>
-                </div>
-                
-                <div class="pricing-card featured">
-                    <div class="featured-badge">Most Popular</div>
-                    <h3 class="plan-name">Professional</h3>
-                    <div class="plan-price">$89<span>/month</span></div>
-                    <ul class="plan-features">
-                        <li>Up to 25 users</li>
-                        <li>100 GB storage</li>
-                        <li>All components</li>
-                        <li>Priority support</li>
-                        <li>10 production apps</li>
-                        <li>Custom branding</li>
-                    </ul>
-                    <button class="cta-button">Try Free for 14 Days</button>
-                </div>
-                
-                <div class="pricing-card">
-                    <h3 class="plan-name">Enterprise</h3>
-                    <div class="plan-price">Custom</div>
-                    <ul class="plan-features">
-                        <li>Unlimited users</li>
-                        <li>Unlimited storage</li>
-                        <li>All features included</li>
-                        <li>24/7 dedicated support</li>
-                        <li>Unlimited apps</li>
-                        <li>On-premises option</li>
-                    </ul>
-                    <button class="secondary-button">Contact Sales</button>
-                </div>
+            <!-- 荣誉奖牌展示 -->
+            <div class="honor-badge">
+                <div class="honor-item"><i class="fas fa-trophy"></i> 2024 中国耐力锦标赛 冠军</div>
+                <div class="honor-item"><i class="fas fa-flag-checkered"></i> 环塔拉力赛 量产组三连冠</div>
+                <div class="honor-item"><i class="fas fa-medal"></i> 年度最具驾驶乐趣机车品牌</div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
+    <!-- 粉丝评价 + 车迷心声 -->
+    <section id="fans">
         <div class="container">
-            <h2>Start Building Today</h2>
-            <p>Join over 10,000 companies that use CodeFlow to accelerate their application development. No credit card required for the free trial.</p>
-            <button class="cta-button">Get Started for Free</button>
+            <h2 class="section-title">车迷心声 · <span class="accent">热血共鸣</span></h2>
+            <div class="section-sub">来自全国张雪机车主的真实声音，因为热爱，我们凝聚成强大骑行车友会。</div>
+            <div class="fans-grid">
+                <div class="testimonial">
+                    <i class="fas fa-quote-left"></i>
+                    <p>从凯越450RR到张雪ZX500R，我见证了张雪机车的进化。犀利操控，澎湃动力，这就是我梦想中的中排量仿赛！</p>
+                    <div class="fan-name">@山城野猫</div>
+                    <div class="fan-location">重庆 · 张雪机车会</div>
+                </div>
+                <div class="testimonial">
+                    <i class="fas fa-quote-left"></i>
+                    <p>800ADV陪我穿越大海道无人区，烂路表现惊艳，可靠性完胜同级。张雪团队真的懂拉力玩家需要什么。</p>
+                    <div class="fan-name">@荒野孤狼</div>
+                    <div class="fan-location">新疆 · 远征俱乐部</div>
+                </div>
+                <div class="testimonial">
+                    <i class="fas fa-quote-left"></i>
+                    <p>250RR是我人生第一辆仿赛，灵活的操控，帅气的颜值，每周都跟车友跑山，张雪机车让我找到了组织！</p>
+                    <div class="fan-name">@女骑手小冉</div>
+                    <div class="fan-location">杭州 · 极速周末</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 48px;">
+                <a href="#" class="btn-outline btn" style="border-radius: 40px;"><i class="fab fa-weixin"></i> 加入车迷微信群 &nbsp;|&nbsp; <i class="fab fa-qq"></i> 官方俱乐部</a>
+            </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
+    <!-- 社区互动 & 订阅（俱乐部入口） -->
+    <section id="contact">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <div class="logo">
-                        <div class="logo-icon"><i class="fas fa-bezier-curve"></i></div>
-                        <div class="logo-text">Code<span>Flow</span></div>
-                    </div>
-                    <p style="margin-top: 20px; color: #aaa;">The leading visual development platform for building enterprise applications with minimal coding.</p>
+            <div class="newsletter">
+                <h3><i class="fas fa-motorcycle" style="color:#e03a3a;"></i> 张雪机车·车迷殿堂</h3>
+                <p>订阅最新动态，获取限量版周边、赛道体验日资格，与张雪团队零距离互动！</p>
+                <div class="form-group">
+                    <input type="email" placeholder="您的电子邮箱" id="fanEmail">
+                    <button id="subscribeBtn"><i class="fas fa-paper-plane"></i> 极速加入</button>
                 </div>
-                
-                <div class="footer-column">
-                    <h3>Product</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Features</a></li>
-                        <li><a href="#">Pricing</a></li>
-                        <li><a href="#">Use Cases</a></li>
-                        <li><a href="#">Integrations</a></li>
-                        <li><a href="#">Roadmap</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">Tutorials</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Support</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Company</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
+                <p style="margin-top: 20px; font-size: 0.8rem;">* 加入后你将获得专属车迷编号及官方改装资讯</p>
             </div>
-            
-            <div class="copyright">
-                <p>&copy; 2023 CodeFlow. All rights reserved.</p>
+            <!-- 额外车迷聚集信息 -->
+            <div style="display: flex; justify-content: center; gap: 24px; margin-top: 48px; flex-wrap: wrap;">
+                <div style="background: #0b0b0b; border-radius: 60px; padding: 12px 24px;"><i class="fas fa-map-marker-alt" style="color:#e03a3a;"></i> 全国32家授权体验中心</div>
+                <div style="background: #0b0b0b; border-radius: 60px; padding: 12px 24px;"><i class="fas fa-calendar-alt" style="color:#e03a3a;"></i> 年度张雪机车嘉年华</div>
+                <div style="background: #0b0b0b; border-radius: 60px; padding: 12px 24px;"><i class="fas fa-hand-peace"></i>  #张雪骑士精神</div>
             </div>
         </div>
-    </footer>
+    </section>
+</main>
 
-    <script>
-        // Mobile menu toggle
-        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-            
-            // Adjust for mobile
-            if (window.innerWidth <= 768) {
-                if (navLinks.style.display === 'flex') {
-                    navLinks.style.flexDirection = 'column';
-                    navLinks.style.position = 'absolute';
-                    navLinks.style.top = '80px';
-                    navLinks.style.left = '0';
-                    navLinks.style.width = '100%';
-                    navLinks.style.backgroundColor = 'white';
-                    navLinks.style.padding = '20px';
-                    navLinks.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-                    
-                    const navItems = document.querySelectorAll('.nav-links li');
-                    navItems.forEach(item => {
-                        item.style.margin = '10px 0';
-                    });
-                }
-            }
-        });
+<footer>
+    <div class="container footer-content">
+        <div class="copyright">
+            <i class="far fa-copyright"></i> 2025 张雪机车车迷殿堂 | 信仰燃擎 中国智造
+        </div>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-weibo"></i></a>
+            <a href="#"><i class="fab fa-bilibili"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="container" style="text-align: center; margin-top: 24px; font-size: 12px; color: #444;">
+        本网站为车迷爱好者社区，致敬张雪机车文化。
+    </div>
+</footer>
+
+<!-- 简单交互：平滑滚动、订阅按钮反馈、导航高亮 -->
+<script>
+    (function() {
+        // 平滑滚动 + 活动导航高亮
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const sections = document.querySelectorAll('section[id]');
         
-        // Smooth scrolling for anchor links
+        function updateActiveLink() {
+            let current = '';
+            const scrollPos = window.scrollY + 150;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                const href = link.getAttribute('href').substring(1);
+                if (href === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', updateActiveLink);
+        window.addEventListener('load', updateActiveLink);
+        
+        // 平滑滚动（所有锚点）
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
                 const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Close mobile menu if open
-                    if(window.innerWidth <= 768) {
-                        document.querySelector('.nav-links').style.display = 'none';
-                    }
+                if (targetId === "#" || targetId === "") return;
+                const targetElem = document.querySelector(targetId);
+                if (targetElem) {
+                    e.preventDefault();
+                    targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // 手动更新一下高亮
+                    setTimeout(updateActiveLink, 200);
                 }
             });
         });
         
-        // Simple testimonial slider
-        const testimonials = [
-            {
-                text: "CodeFlow transformed how we deliver solutions to our business units. What used to take 6 months now takes 3 weeks. Our development team can focus on complex problems while business teams build their own solutions.",
-                name: "Sarah Chen",
-                position: "CTO, TechGrowth Inc.",
-                initials: "SC"
-            },
-            {
-                text: "We reduced our app development time by 80% using CodeFlow. The visual interface made it easy for our analysts to build data dashboards without waiting for IT resources.",
-                name: "Marcus Johnson",
-                position: "Director of Operations, DataCorp",
-                initials: "MJ"
-            },
-            {
-                text: "As a non-technical founder, CodeFlow allowed me to build our MVP in just 2 months. I could test ideas quickly and iterate based on user feedback without deep coding knowledge.",
-                name: "Lisa Wang",
-                position: "Founder, StartupLabs",
-                initials: "LW"
-            }
-        ];
-        
-        let currentTestimonial = 0;
-        const testimonialElement = document.querySelector('.testimonial');
-        
-        function rotateTestimonial() {
-            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-            updateTestimonial();
+        // 订阅按钮模拟提交
+        const subBtn = document.getElementById('subscribeBtn');
+        if (subBtn) {
+            subBtn.addEventListener('click', function(e) {
+                const emailInput = document.getElementById('fanEmail');
+                const email = emailInput.value.trim();
+                if (!email || !email.includes('@') || !email.includes('.')) {
+                    alert('请输入有效的邮箱地址，加入张雪机车迷阵营🏍️');
+                    return;
+                }
+                alert(`🏁 欢迎 ${email} 加入张雪机车迷殿堂！我们将在第一时间向您推送最新资讯、赛道日消息与车迷聚会。`);
+                emailInput.value = '';
+            });
         }
-        
-        function updateTestimonial() {
-            const testimonial = testimonials[currentTestimonial];
-            testimonialElement.innerHTML = `
-                <div class="testimonial-text">"${testimonial.text}"</div>
-                <div class="testimonial-author">
-                    <div class="author-avatar">${testimonial.initials}</div>
-                    <div class="author-info">
-                        <h4>${testimonial.name}</h4>
-                        <p>${testimonial.position}</p>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Auto-rotate testimonials every 5 seconds
-        setInterval(rotateTestimonial, 5000);
-        
-        // CTA button interactions
-        document.querySelectorAll('.cta-button').forEach(button => {
-            button.addEventListener('click', function() {
-                alert('Thank you for your interest in CodeFlow! You would be redirected to the signup page in a real implementation.');
+
+        // 给“预约试驾”按钮添加演示提示（可选，提升交互感）
+        const demoBtns = document.querySelectorAll('.btn-small');
+        demoBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('⚡ 车迷专属｜请联系附近经销商预约试驾，或等待官方开放试驾通道。');
             });
         });
-        
-        // Pricing card interactions
-        document.querySelectorAll('.pricing-card button').forEach(button => {
-            button.addEventListener('click', function() {
-                const planName = this.closest('.pricing-card').querySelector('.plan-name').textContent;
-                alert(`You selected the ${planName} plan. In a real implementation, you would be redirected to the checkout process.`);
+
+        // 底部社群按钮统一友好提示
+        const socialIcons = document.querySelectorAll('.social-links a');
+        socialIcons.forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('🚀 车迷社区即将开放官方群组，敬请关注张雪机车公众号！');
             });
         });
-    </script>
+        const clubBtn = document.querySelector('.btn-outline.btn');
+        if(clubBtn && clubBtn.innerText.includes('车迷微信群')) {
+            clubBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('🎉 车迷社区入口：请关注“张雪机车”官方公众号，菜单栏点击“车迷会”加入万人大家庭！');
+            });
+        }
+    })();
+</script>
 </body>
 </html>
